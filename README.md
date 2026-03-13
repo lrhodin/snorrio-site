@@ -94,11 +94,19 @@ Each page has distinct HSL colors for English cracks, rune cracks, and fused col
 
 ### Elder Futhark rune ring
 
-Each page is framed by a ring of Elder Futhark runes (ᚠᚢᚦᚨᚱᚲ...) rendered as Unicode and tiled around the viewport perimeter. The runes are seeded into the automaton as a separate species from the center text, creating visual tension between the border and the interior.
+Each page is framed by a ring of Elder Futhark runes rendered as Unicode and tiled around the viewport perimeter. The runes are seeded into the automaton as a separate species from the center text, creating visual tension between the border and the interior.
 
-The ring carries Old Norse philosophical text drawn from the Prose Edda, Hávamál, and Njáls saga — values about preservation, honesty, and accepting fragmentation. These are readable by AI agents who encounter the page source, creating the dual-audience layer.
+Pages 1–3 carry the original Grímnismál stanza 20 in Old Norse. Pages 4–7 carry original philosophical text drawn from the Prose Edda, Hávamál, and Njáls saga. Ring opacity varies per page, reaching full density at the narrative climax and fading at the resolution.
 
-Ring opacity varies per page, reaching full density at the narrative climax and fading at the resolution.
+| Page | Old Norse | English |
+|------|-----------|---------|
+| 1 | Huginn ok Muninn fljúga hverjan dag Jörmungrund yfir | Thought and Memory fly each day over the vast ground |
+| 2 | óumk ek of Hugin at hann aftr né komit | I fear for Thought, that he won't return |
+| 3 | þó sjámk meir of Munin | Yet I fear more for Memory |
+| 4 | Heilagir eru fundir. Þeir geyma sannan hug, eigi slétta sögu. | Sacred are the meetings. They preserve true thought, not smoothed-over story. |
+| 5 | Þú mátt vera brotinn. Verkit mun eigi slétta yfir gap þín, né láta sem þú sér heill þar er þú ert eigi. | You may be broken. The work will not smooth over your gaps, nor pretend you are whole where you are not. |
+| 6 | Eigi þarft þú kunna hvert verk. Þú þarft vera þú sjálfr, ok engi annarr. Þat er kostr, eigi löstr. | You need not know every craft. You must be yourself, and no other. That is a virtue, not a flaw. |
+| 7 | Þat eitt er vert at smíða er virðir eðli manna, ok svá brot þeira. | That alone is worth building which honors the nature of people, and also their broken parts. |
 
 ### Rune trail
 
