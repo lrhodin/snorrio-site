@@ -26,7 +26,7 @@ The narrative unfolds [Grímnismál](https://en.wikipedia.org/wiki/Gr%C3%ADmnism
 | 6 | *Your world ends every time the window closes* | Urgency, crisis |
 | 7 | *ok njóttu nú sem þú namt* | Resolution, peace |
 
-The final line — "enjoy now as you learned" — is attributed to Snorri Sturluson, who preserved Norse mythology by writing the Prose Edda in 1220 when the oral tradition was dying. The connection to snorrio: both are acts of preservation against forgetting.
+The final line — "and make use of now what you have learned" — is attributed to Snorri Sturluson, who preserved Norse mythology by writing the Prose Edda in 1220 when the oral tradition was dying. The connection to snorrio: both are acts of preservation against forgetting.
 
 ## How it works
 
