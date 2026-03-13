@@ -135,7 +135,6 @@ Source pixels (text borders) are immune to void — the words always hold their 
 ```
 site/
   gpu.html          # The page — single file, zero dependencies, ~58KB
-  index.html        # CPU-only version (Canvas 2D, no WebGL required)
 
 worker/
   src/index.ts      # Cloudflare Worker — serves page + /install redirect
