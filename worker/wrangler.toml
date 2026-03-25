@@ -1,14 +1,7 @@
 name = "snorrio-site"
-main = "src/index.ts"
+main = "src/index.js"
 compatibility_date = "2024-01-01"
-
-# Set your Cloudflare account ID:
-#   wrangler deploy --account-id YOUR_ACCOUNT_ID
-# Or set CLOUDFLARE_ACCOUNT_ID environment variable
 
 routes = [
   { pattern = "snorr.io", custom_domain = true }
 ]
-
-[assets]
-directory = "./public"

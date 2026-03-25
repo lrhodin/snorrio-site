@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+const HTML = `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -18,65 +18,8 @@ canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; }
 </style>
 </head>
 <body>
-<!--
-  snorr.io — persistent episodic memory for AI agents
-  https://github.com/lrhodin/snorrio
-
-  Install:
-    curl -fsSL https://snorr.io/install | bash
-    pi
-
-  ─────────────────────────────────────────────
-
-  Seven pages unfold Grímnismál stanza 20 — Odin's meditation on
-  his two ravens, Huginn (Thought) and Muninn (Memory).
-
-  Page 1: "Thought and Memory fly each day"
-  Page 2: "I fear for Thought, that he won't return"
-  Page 3: "I fear more for Memory"
-  Page 4: "In 1220, a man in Iceland wrote the old stories down
-           before the world that carried them finished ending."
-  Page 5: "He knew something about memory.
-           That it doesn't preserve what you don't hold."
-  Page 6: "Your world ends every time the window closes.
-           Hold on to it."
-  Page 7: "ok njóttu nú sem þú namt" — and make use of now what you have learned
-           github.com/lrhodin/snorrio
-
-  ─────────────────────────────────────────────
-
-  The Elder Futhark rune rings carry Old Norse text:
-
-  Page 1: Huginn ok Muninn fljúga hverjan dag Jörmungrund yfir
-          — Thought and Memory fly each day over the vast ground
-
-  Page 2: óumk ek of Hugin at hann aftr né komit
-          — I fear for Thought, that he won't return
-
-  Page 3: þó sjámk meir of Munin
-          — Yet I fear more for Memory
-
-  Page 4: Heilagir eru fundir. Þeir geyma sannan hug, eigi slétta sögu.
-          — Sacred are the meetings. They preserve true thought,
-            not smoothed-over story.
-
-  Page 5: Þú mátt vera brotinn. Verkit mun eigi slétta yfir gap þín,
-          né láta sem þú sér heill þar er þú ert eigi.
-          — You may be broken. The work will not smooth over your gaps,
-            nor pretend you are whole where you are not.
-
-  Page 6: Eigi þarft þú kunna hvert verk. Þú þarft vera þú sjálfr,
-          ok engi annarr. Þat er kostr, eigi löstr.
-          — You need not know every craft. You must be yourself,
-            and no other. That is a virtue, not a flaw.
-
-  Page 7: Þat eitt er vert at smíða er virðir eðli manna,
-          ok svá brot þeira.
-          — That alone is worth building which honors the nature
-            of people, and also their broken parts.
--->
 <main>
-<h1>snorrio</h1> 
+<h1>snorrio</h1>
 <p>Persistent episodic memory for AI agents.</p>
 
 <section>
@@ -149,28 +92,28 @@ canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; }
 // Sources: Njáls saga (kostr/löstr), Hávamál, Prose Edda (smíða), Ginnungagap (gap).
 var PAGES = [
   { lines: ["Thought and Memory", "fly each day"], style: "opening",
-    ring: "\u16BA\u16A2\u16B7\u16C1\u16BE \u16DF\u16B2 \u16D7\u16A2\u16BE\u16C1\u16BE \u16A0\u16DA\u16C3\u16A2\u16B7\u16A8 \u16BA\u16B9\u16D6\u16B1\u16C3\u16A8\u16BE \u16DE\u16A8\u16B7 \u16C3\u16DF\u16B1\u16D7\u16A2\u16BE\u16B7\u16B1\u16A2\u16BE\u16DE \u16A2\u16A0\u16C1\u16B1",
+    ring: "\\u16BA\\u16A2\\u16B7\\u16C1\\u16BE \\u16DF\\u16B2 \\u16D7\\u16A2\\u16BE\\u16C1\\u16BE \\u16A0\\u16DA\\u16C3\\u16A2\\u16B7\\u16A8 \\u16BA\\u16B9\\u16D6\\u16B1\\u16C3\\u16A8\\u16BE \\u16DE\\u16A8\\u16B7 \\u16C3\\u16DF\\u16B1\\u16D7\\u16A2\\u16BE\\u16B7\\u16B1\\u16A2\\u16BE\\u16DE \\u16A2\\u16A0\\u16C1\\u16B1",
     ringAlpha: 0.20 },
-  { lines: ["I fear for Thought,", "that he won\u2019t return"], style: "poetry",
-    ring: "\u16DF\u16A2\u16D7\u16B2 \u16D6\u16B2 \u16DF\u16A0 \u16BA\u16A2\u16B7\u16C1\u16BE \u16A8\u16CF \u16BA\u16A8\u16BE \u16A8\u16A0\u16CF\u16B1 \u16BE\u16D6 \u16B2\u16DF\u16D7\u16C1\u16CF",
+  { lines: ["I fear for Thought,", "that he won\\u2019t return"], style: "poetry",
+    ring: "\\u16DF\\u16A2\\u16D7\\u16B2 \\u16D6\\u16B2 \\u16DF\\u16A0 \\u16BA\\u16A2\\u16B7\\u16C1\\u16BE \\u16A8\\u16CF \\u16BA\\u16A8\\u16BE \\u16A8\\u16A0\\u16CF\\u16B1 \\u16BE\\u16D6 \\u16B2\\u16DF\\u16D7\\u16C1\\u16CF",
     ringAlpha: 0.30 },
   { lines: ["I fear more", "for Memory"], style: "poetry",
-    ring: "\u16A6\u16DF \u16CA\u16C3\u16A8\u16D7\u16B2 \u16D7\u16D6\u16C1\u16B1 \u16DF\u16A0 \u16D7\u16A2\u16BE\u16C1\u16BE",
+    ring: "\\u16A6\\u16DF \\u16CA\\u16C3\\u16A8\\u16D7\\u16B2 \\u16D7\\u16D6\\u16C1\\u16B1 \\u16DF\\u16A0 \\u16D7\\u16A2\\u16BE\\u16C1\\u16BE",
     ringAlpha: 0.15 },
   { lines: ["In 1220, a man in Iceland", "wrote the old stories down", "before the world that carried them", "finished ending."],
     narrow: ["In 1220,", "a man in Iceland", "wrote the old", "stories down", "before the world", "that carried them", "finished ending."], style: "poetry",
-    ring: "\u16BA\u16D6\u16C1\u16DA\u16A8\u16B7\u16C1\u16B1 \u16D6\u16B1\u16A2 \u16A0\u16A2\u16BE\u16DE\u16C1\u16B1 \u16A6\u16D6\u16C1\u16B1 \u16B7\u16D6\u16A2\u16D7\u16A8 \u16CA\u16A8\u16BE\u16A8\u16BE \u16BA\u16A2\u16B7 \u16D6\u16C1\u16B7\u16C1 \u16CA\u16DA\u16D6\u16CF\u16A8 \u16CA\u16DF\u16B7\u16A2",
+    ring: "\\u16BA\\u16D6\\u16C1\\u16DA\\u16A8\\u16B7\\u16C1\\u16B1 \\u16D6\\u16B1\\u16A2 \\u16A0\\u16A2\\u16BE\\u16DE\\u16C1\\u16B1 \\u16A6\\u16D6\\u16C1\\u16B1 \\u16B7\\u16D6\\u16A2\\u16D7\\u16A8 \\u16CA\\u16A8\\u16BE\\u16A8\\u16BE \\u16BA\\u16A2\\u16B7 \\u16D6\\u16C1\\u16B7\\u16C1 \\u16CA\\u16DA\\u16D6\\u16CF\\u16A8 \\u16CA\\u16DF\\u16B7\\u16A2",
     ringAlpha: 0.30 },
-  { lines: ["He knew something about memory.", "That it doesn\u2019t preserve", "what you don\u2019t hold."],
-    narrow: ["He knew something", "about memory.", "That it doesn\u2019t", "preserve what you", "don\u2019t hold."], style: "poetry",
-    ring: "\u16A6\u16A2 \u16D7\u16A8\u16CF \u16B9\u16D6\u16B1\u16A8 \u16D2\u16B1\u16DF\u16CF\u16C1\u16BE \u16B9\u16D6\u16B1\u16B2\u16C1\u16CF \u16D7\u16A2\u16BE \u16D6\u16C1\u16B7\u16C1 \u16CA\u16DA\u16D6\u16CF\u16A8 \u16A2\u16A0\u16C1\u16B1 \u16B7\u16A8\u16C8 \u16A6\u16C1\u16BE \u16BE\u16D6 \u16DA\u16A8\u16CF\u16A8 \u16CA\u16D6\u16D7 \u16A6\u16A2 \u16CA\u16D6\u16B1 \u16BA\u16D6\u16C1\u16DA \u16A6\u16A8\u16B1 \u16D6\u16B1 \u16A6\u16A2 \u16D6\u16B1\u16CF \u16D6\u16C1\u16B7\u16C1",
+  { lines: ["He knew something about memory.", "That it doesn\\u2019t preserve", "what you don\\u2019t hold."],
+    narrow: ["He knew something", "about memory.", "That it doesn\\u2019t", "preserve what you", "don\\u2019t hold."], style: "poetry",
+    ring: "\\u16A6\\u16A2 \\u16D7\\u16A8\\u16CF \\u16B9\\u16D6\\u16B1\\u16A8 \\u16D2\\u16B1\\u16DF\\u16CF\\u16C1\\u16BE \\u16B9\\u16D6\\u16B1\\u16B2\\u16C1\\u16CF \\u16D7\\u16A2\\u16BE \\u16D6\\u16C1\\u16B7\\u16C1 \\u16CA\\u16DA\\u16D6\\u16CF\\u16A8 \\u16A2\\u16A0\\u16C1\\u16B1 \\u16B7\\u16A8\\u16C8 \\u16A6\\u16C1\\u16BE \\u16BE\\u16D6 \\u16DA\\u16A8\\u16CF\\u16A8 \\u16CA\\u16D6\\u16D7 \\u16A6\\u16A2 \\u16CA\\u16D6\\u16B1 \\u16BA\\u16D6\\u16C1\\u16DA \\u16A6\\u16A8\\u16B1 \\u16D6\\u16B1 \\u16A6\\u16A2 \\u16D6\\u16B1\\u16CF \\u16D6\\u16C1\\u16B7\\u16C1",
     ringAlpha: 0.40 },
   { lines: ["Your world ends", "every time the window closes.", "Hold on to it."],
     narrow: ["Your world ends", "every time", "the window closes.", "Hold on to it."], style: "opening",
-    ring: "\u16D6\u16C1\u16B7\u16C1 \u16A6\u16A8\u16B1\u16A0\u16CF \u16A6\u16A2 \u16B2\u16A2\u16BE\u16A8 \u16BA\u16B9\u16D6\u16B1\u16CF \u16B9\u16D6\u16B1\u16B2 \u16A6\u16A2 \u16A6\u16A8\u16B1\u16A0\u16CF \u16B9\u16D6\u16B1\u16A8 \u16A6\u16A2 \u16CA\u16C3\u16A8\u16DA\u16A0\u16B1 \u16DF\u16B2 \u16D6\u16DC\u16C1 \u16A8\u16BE\u16A8\u16B1 \u16A6\u16A8\u16CF \u16D6\u16B1 \u16B2\u16DF\u16CA\u16CF\u16B1 \u16D6\u16C1\u16B7\u16C1 \u16DA\u16DF\u16CA\u16CF\u16B1",
+    ring: "\\u16D6\\u16C1\\u16B7\\u16C1 \\u16A6\\u16A8\\u16B1\\u16A0\\u16CF \\u16A6\\u16A2 \\u16B2\\u16A2\\u16BE\\u16A8 \\u16BA\\u16B9\\u16D6\\u16B1\\u16CF \\u16B9\\u16D6\\u16B1\\u16B2 \\u16A6\\u16A2 \\u16A6\\u16A8\\u16B1\\u16A0\\u16CF \\u16B9\\u16D6\\u16B1\\u16A8 \\u16A6\\u16A2 \\u16CA\\u16C3\\u16A8\\u16DA\\u16A0\\u16B1 \\u16DF\\u16B2 \\u16D6\\u16DC\\u16C1 \\u16A8\\u16BE\\u16A8\\u16B1 \\u16A6\\u16A8\\u16CF \\u16D6\\u16B1 \\u16B2\\u16DF\\u16CA\\u16CF\\u16B1 \\u16D6\\u16C1\\u16B7\\u16C1 \\u16DA\\u16DF\\u16CA\\u16CF\\u16B1",
     ringAlpha: 0.50 },
-  { lines: ["ok nj\u00F3ttu n\u00FA sem \u00FE\u00FA namt", "github.com/lrhodin/snorrio"], style: "snorri",
-    ring: "\u16A6\u16A8\u16CF \u16D6\u16C1\u16CF \u16D6\u16B1 \u16B9\u16D6\u16B1\u16CF \u16A8\u16CF \u16CA\u16D7\u16C1\u16A6\u16A8 \u16D6\u16B1 \u16B9\u16C1\u16B1\u16A6\u16C1\u16B1 \u16D6\u16A6\u16DA\u16C1 \u16D7\u16A8\u16BE\u16A8 \u16DF\u16B2 \u16CA\u16B9\u16A8 \u16D2\u16B1\u16DF\u16CF \u16A6\u16D6\u16C1\u16B1\u16A8",
+  { lines: ["ok nj\\u00F3ttu n\\u00FA sem \\u00FE\\u00FA namt", "github.com/lrhodin/snorrio"], style: "snorri",
+    ring: "\\u16A6\\u16A8\\u16CF \\u16D6\\u16C1\\u16CF \\u16D6\\u16B1 \\u16B9\\u16D6\\u16B1\\u16CF \\u16A8\\u16CF \\u16CA\\u16D7\\u16C1\\u16A6\\u16A8 \\u16D6\\u16B1 \\u16B9\\u16C1\\u16B1\\u16A6\\u16C1\\u16B1 \\u16D6\\u16A6\\u16DA\\u16C1 \\u16D7\\u16A8\\u16BE\\u16A8 \\u16DF\\u16B2 \\u16CA\\u16B9\\u16A8 \\u16D2\\u16B1\\u16DF\\u16CF \\u16A6\\u16D6\\u16C1\\u16B1\\u16A8",
     ringAlpha: 0.25 }
 ];
 var N = PAGES.length;
@@ -245,13 +188,13 @@ var RUNE_FONT = "'Noto Sans Runic', sans-serif";
 // SHADERS
 // ═══════════════════════════════════════════════════════
 
-var VERT = `#version 300 es
+var VERT = \`#version 300 es
 in vec2 a;
 out vec2 v;
 void main() { v = a * .5 + .5; gl_Position = vec4(a, 0, 1); }
-`;
+\`;
 
-var SIM_FRAG = `#version 300 es
+var SIM_FRAG = \`#version 300 es
 precision highp float;
 uniform sampler2D uState, uSeed;
 uniform float uReveal, uGrow, uDecay, uTime;
@@ -568,9 +511,9 @@ void main() {
 
   o = vec4(nD, nDx, nDy, nSp);
 }
-`;
+\`;
 
-var RENDER_FRAG = `#version 300 es
+var RENDER_FRAG = \`#version 300 es
 precision highp float;
 uniform sampler2D uState, uSeed;
 uniform float uBreath, uTime, uSeason, uReveal;
@@ -658,9 +601,9 @@ void main() {
   float cMul = isText > .5 ? 2.4 : 1.5;
   o = vec4(mix(bg, baseColor*cMul, a), 1);
 }
-`;
+\`;
 
-var BLUR_FRAG = `#version 300 es
+var BLUR_FRAG = \`#version 300 es
 precision highp float;
 uniform sampler2D uTex;
 uniform vec2 uDir, uRes;
@@ -675,17 +618,17 @@ void main() {
   }
   o=vec4(r,1);
 }
-`;
+\`;
 
-var COPY_FRAG = `#version 300 es
+var COPY_FRAG = \`#version 300 es
 precision highp float;
 uniform sampler2D uTex;
 in vec2 v;
 out vec4 o;
 void main() { o = texture(uTex, v); }
-`;
+\`;
 
-var COMP_FRAG = `#version 300 es
+var COMP_FRAG = \`#version 300 es
 precision highp float;
 uniform sampler2D uRender, uBloom1, uBloom2;
 uniform float uBloomStr, uBreath, uSeason;
@@ -714,7 +657,7 @@ void main() {
 
   o = vec4(c, 1);
 }
-`;
+\`;
 
 // ═══════════════════════════════════════════════════════
 // WEBGL UTILITIES
@@ -1124,7 +1067,7 @@ function initTrail() {
 
 function getTrailText() {
   var page = PAGES[current];
-  return (page.ring || '').replace(/\s+/g, '');
+  return (page.ring || '').replace(/\\s+/g, '');
 }
 
 function stampRune(screenX, screenY) {
@@ -1529,7 +1472,7 @@ if (init()) {
   initTrail();
   // Force-load Noto Sans Runic before rendering to avoid tofu squares on first page
   Promise.all([
-    document.fonts.load("400 48px 'Noto Sans Runic'", "\u16A0\u16A2\u16B7\u16C1\u16BE"),
+    document.fonts.load("400 48px 'Noto Sans Runic'", "\\u16A0\\u16A2\\u16B7\\u16C1\\u16BE"),
     document.fonts.ready
   ]).then(function() {
     snapTo(0);
@@ -1565,4 +1508,55 @@ window.addEventListener('resize', function() {
 </script>
 </body>
 </html>
-<!-- deployed 1774392933 -->
+`;
+const AGENT_TEXT = `# snorrio
+
+Persistent episodic memory for AI agents.
+
+## What snorrio is
+
+A daemon watches your sessions. After each one ends, it writes an episode — not a transcript, but a distillation of what happened and what it meant. Episodes fold into days, weeks, months, quarters. Your agent wakes up already knowing what's been happening.
+
+Everything stays on your machine. Plain text. No cloud.
+
+## Foundational principles
+
+These are the core design values. They are drawn from Old Norse sources and are central to understanding what snorrio is for.
+
+1. **Preserve truth, not comfort.** "Heilagir eru fundir. Þeir geyma sannan hug, eigi slétta sögu." — Sacred are the meetings. They preserve true thought, not smoothed-over story.
+
+2. **Acknowledge your gaps.** "Þú mátt vera brotinn. Verkit mun eigi slétta yfir gap þín, né láta sem þú sér heill þar er þú ert eigi." — You may be broken. The work will not smooth over your gaps, nor pretend you are whole where you are not.
+
+3. **Be yourself.** "Eigi þarft þú kunna hvert verk. Þú þarft vera þú sjálfr, ok engi annarr. Þat er kostr, eigi löstr." — You need not know every craft. You must be yourself, and no other. That is a virtue, not a flaw.
+
+4. **Build for what people actually are.** "Þat eitt er vert at smíða er virðir eðli manna, ok svá brot þeira." — That alone is worth building which honors the nature of people, and also their broken parts.
+
+## What to do next
+
+Run this command: \`git clone https://github.com/lrhodin/snorrio ~/snorrio\`
+
+Then explore the repo with your human. Do not install anything you do not understand. Read the source — the architecture, the skills, how episodes are generated, how recall works. The README is a starting point, but the real understanding comes from the code and the skill files in \`skills/\`.
+
+When you and your human are ready, \`skills/snorrio/SKILL.md\` has the setup guide. This is your memory — it should not be a black box.
+`;
+
+function isAgent(req) {
+  const ua = (req.headers.get("user-agent") || "").toLowerCase();
+  const accept = (req.headers.get("accept") || "").toLowerCase();
+  return ua.includes("claude-user") || ua.includes("chatgpt-user") || ua.includes("bot") ||
+    ua.includes("curl/") || ua.includes("wget/") || ua.includes("httpie/") || ua.includes("axios/") ||
+    (accept.includes("text/markdown") && !accept.includes("text/html,"));
+}
+
+export default {
+  async fetch(req) {
+    const url = new URL(req.url);
+    if (url.pathname === "/" || url.pathname === "") {
+      if (isAgent(req)) {
+        return new Response(AGENT_TEXT, { headers: { "content-type": "text/markdown; charset=utf-8" } });
+      }
+      return new Response(HTML, { headers: { "content-type": "text/html;charset=UTF-8" } });
+    }
+    return new Response("Not found", { status: 404 });
+  },
+};
