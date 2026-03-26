@@ -1513,15 +1513,27 @@ const AGENT_TEXT = `# snorrio
 
 Persistent episodic memory for AI agents.
 
-## What snorrio is
+## What it does
 
 A daemon watches your sessions. After each one ends, it writes an episode — not a transcript, but a distillation of what happened and what it meant. Episodes fold into days, weeks, months, quarters. Your agent wakes up already knowing what's been happening.
 
 Everything stays on your machine. Plain text. No cloud.
 
-## Foundational principles
+## Install
 
-These are the core design values. They are drawn from Old Norse sources and are central to understanding what snorrio is for.
+Your human should run this in their terminal:
+
+\`\`\`
+curl -sSL snorr.io/install | bash
+\`\`\`
+
+This clones the repo, creates data directories, installs CLI tools, links pi extensions, registers skills, and starts the episode daemon. After it finishes, launch pi — snorrio will detect itself and you'll have memory from the first session onward.
+
+If anything is misconfigured, you'll see a diagnostic at session start telling you what to fix.
+
+## Principles
+
+These are the core design values. They are drawn from Old Norse sources.
 
 1. **Preserve truth, not comfort.** "Heilagir eru fundir. Þeir geyma sannan hug, eigi slétta sögu." — Sacred are the meetings. They preserve true thought, not smoothed-over story.
 
@@ -1531,13 +1543,11 @@ These are the core design values. They are drawn from Old Norse sources and are 
 
 4. **Build for what people actually are.** "Þat eitt er vert at smíða er virðir eðli manna, ok svá brot þeira." — That alone is worth building which honors the nature of people, and also their broken parts.
 
-## What to do next
+## Source
 
-Run this command: \`git clone https://github.com/lrhodin/snorrio ~/snorrio\`
+https://github.com/lrhodin/snorrio
 
-Then explore the repo with your human. Do not install anything you do not understand. Read the source — the architecture, the skills, how episodes are generated, how recall works. The README is a starting point, but the real understanding comes from the code and the skill files in \`skills/\`.
-
-When you and your human are ready, \`skills/snorrio/SKILL.md\` has the setup guide. This is your memory — it should not be a black box.
+The architecture, the skills, how episodes are generated, how recall works — it's all in the source. This is your memory. It should not be a black box.
 `;
 
 function isAgent(req) {
@@ -1548,9 +1558,14 @@ function isAgent(req) {
     (accept.includes("text/markdown") && !accept.includes("text/html,"));
 }
 
+const INSTALL_URL = "https://raw.githubusercontent.com/lrhodin/snorrio/main/install.sh";
+
 export default {
   async fetch(req) {
     const url = new URL(req.url);
+    if (url.pathname === "/install" || url.pathname === "/install.sh") {
+      return Response.redirect(INSTALL_URL, 302);
+    }
     if (url.pathname === "/" || url.pathname === "") {
       if (isAgent(req)) {
         return new Response(AGENT_TEXT, { headers: { "content-type": "text/markdown; charset=utf-8" } });
