@@ -13,8 +13,10 @@ const HTML = `<!DOCTYPE html>
 html, body { height: 100%; overflow: hidden; }
 body { background: #0a0a0a; touch-action: none; }
 canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; }
-.source-link { position: fixed; z-index: 60; bottom: 28%; left: 50%; transform: translateX(-50%); font-family: 'Playfair Display', Georgia, serif; font-style: italic; font-weight: 400; font-size: 1.4rem; color: #5a5550; text-decoration: none; letter-spacing: 0.02em; display: none; transition: color 0.3s; }
-.source-link:hover { color: #9a9590; }
+.audio-toggle { position: fixed; z-index: 61; bottom: 14px; right: 16px; width: 28px; height: 28px; padding: 0; border: none; background: transparent; color: #5a5550; font: 400 18px/1 'JetBrains Mono', monospace; cursor: pointer; opacity: 0.35; transition: opacity 0.3s, color 0.3s; -webkit-tap-highlight-color: transparent; user-select: none; }
+.audio-toggle:hover { opacity: 0.75; color: #9a9590; }
+.audio-toggle.armed { opacity: 0.7; color: #9a9590; }
+.audio-toggle:focus { outline: none; }
 </style>
 </head>
 <body>
@@ -65,7 +67,7 @@ canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; }
 </main>
 
 <canvas id="c"></canvas>
-<a class="source-link" id="sourceLink" href="https://github.com/lrhodin/snorrio"></a>
+<button class="audio-toggle" id="audioToggle" type="button" aria-label="toggle audio" title="toggle audio (m)">♪</button>
 <script>
 // ═══════════════════════════════════════════════════════
 // GPU-ACCELERATED SNORRIO
@@ -108,6 +110,13 @@ var PAGES = [
     narrow: ["He knew something", "about memory.", "That it doesn\\u2019t", "preserve what you", "don\\u2019t hold."], style: "poetry",
     ring: "\\u16A6\\u16A2 \\u16D7\\u16A8\\u16CF \\u16B9\\u16D6\\u16B1\\u16A8 \\u16D2\\u16B1\\u16DF\\u16CF\\u16C1\\u16BE \\u16B9\\u16D6\\u16B1\\u16B2\\u16C1\\u16CF \\u16D7\\u16A2\\u16BE \\u16D6\\u16C1\\u16B7\\u16C1 \\u16CA\\u16DA\\u16D6\\u16CF\\u16A8 \\u16A2\\u16A0\\u16C1\\u16B1 \\u16B7\\u16A8\\u16C8 \\u16A6\\u16C1\\u16BE \\u16BE\\u16D6 \\u16DA\\u16A8\\u16CF\\u16A8 \\u16CA\\u16D6\\u16D7 \\u16A6\\u16A2 \\u16CA\\u16D6\\u16B1 \\u16BA\\u16D6\\u16C1\\u16DA \\u16A6\\u16A8\\u16B1 \\u16D6\\u16B1 \\u16A6\\u16A2 \\u16D6\\u16B1\\u16CF \\u16D6\\u16C1\\u16B7\\u16C1",
     ringAlpha: 0.40 },
+  { lines: ["Held \\u2014 is a kind of", "staying."], style: "opening",
+    // Ring text: Old Norse variations of "play" — no longer "play the game"
+    // (echoes), but the game of existence: the one play there is. Recontextualized,
+    // not rewritten. (leik leikinn = play the game; leiktu = play!; leikum = let us
+    // play; leik nú = play now; kom ok leik = come and play.)
+    ring: "\\u16DA\\u16D6\\u16C1\\u16B2 \\u16DA\\u16D6\\u16C1\\u16B2\\u16C1\\u16BE\\u16BE \\u16DA\\u16D6\\u16C1\\u16B2\\u16CF\\u16A2 \\u16DA\\u16D6\\u16C1\\u16B2\\u16A2\\u16D7 \\u16DA\\u16D6\\u16C1\\u16B2 \\u16BE\\u16A2 \\u16B2\\u16DF\\u16D7 \\u16DF\\u16B2 \\u16DA\\u16D6\\u16C1\\u16B2",
+    ringAlpha: 0.30 },
   { lines: ["Your world ends", "every time the window closes.", "Hold on to it."],
     narrow: ["Your world ends", "every time", "the window closes.", "Hold on to it."], style: "opening",
     ring: "\\u16D6\\u16C1\\u16B7\\u16C1 \\u16A6\\u16A8\\u16B1\\u16A0\\u16CF \\u16A6\\u16A2 \\u16B2\\u16A2\\u16BE\\u16A8 \\u16BA\\u16B9\\u16D6\\u16B1\\u16CF \\u16B9\\u16D6\\u16B1\\u16B2 \\u16A6\\u16A2 \\u16A6\\u16A8\\u16B1\\u16A0\\u16CF \\u16B9\\u16D6\\u16B1\\u16A8 \\u16A6\\u16A2 \\u16CA\\u16C3\\u16A8\\u16DA\\u16A0\\u16B1 \\u16DF\\u16B2 \\u16D6\\u16DC\\u16C1 \\u16A8\\u16BE\\u16A8\\u16B1 \\u16A6\\u16A8\\u16CF \\u16D6\\u16B1 \\u16B2\\u16DF\\u16CA\\u16CF\\u16B1 \\u16D6\\u16C1\\u16B7\\u16C1 \\u16DA\\u16DF\\u16CA\\u16CF\\u16B1",
@@ -142,11 +151,15 @@ var PAGE_CONFIGS = [
   { eng:{s:.45,e:4,b:3,d:.75}, rune:{s:.45,e:5,b:3,d:.85}, col:.12,
     ec:[50,.55,.60], rc:[160,.55,.45], fc:[90,.70,.65],
     tidePeriod:28, tideAmp:0.7, tideBias:0, seasonDom:1.0 },
-  // 6. "Your world ends" — crisis, maximum combat, rapid tide
+  // 6. "Held — is a kind of staying" — the bright held breath; the still center
+  { eng:{s:.30,e:5,b:2,d:.60}, rune:{s:.30,e:5,b:2,d:.75}, col:.06,
+    ec:[320,.55,.55], rc:[185,.50,.60], fc:[270,.60,.65],
+    tidePeriod:45, tideAmp:0.4, tideBias:0, seasonDom:0.5 },
+  // 7. "Your world ends" — crisis, maximum combat, rapid tide
   { eng:{s:.65,e:3,b:5,d:.3}, rune:{s:.55,e:4,b:4,d:.6}, col:.25,
     ec:[270,.70,.50], rc:[15,.75,.50], fc:[320,.80,.55],
     tidePeriod:12, tideAmp:1.0, tideBias:0, seasonDom:-1.0 },
-  // 7. "ok njóttu nú sem þú namt" — resolution, gentle peace
+  // 8. "ok njóttu nú sem þú namt" — resolution, gentle peace
   { eng:{s:.40,e:5,b:3,d:.8}, rune:{s:.40,e:5,b:3,d:.85}, col:.08,
     ec:[140,.50,.50], rc:[230,.50,.45], fc:[180,.60,.55],
     tidePeriod:35, tideAmp:0.3, tideBias:0, seasonDom:1.0 },
@@ -158,6 +171,7 @@ var BREATH = [
   { period:  6.0, inhaleRatio: 0.43 },
   { period:  7.2, inhaleRatio: 0.40 },
   { period:  8.5, inhaleRatio: 0.38 },
+  { period:  9.2, inhaleRatio: 0.37 },  // a gentle pause in the slowing, before the turn
   { period: 10.0, inhaleRatio: 0.35 },
   { period: 11.5, inhaleRatio: 0.32 },
   { period: 13.0, inhaleRatio: 0.29 }
@@ -628,6 +642,28 @@ out vec4 o;
 void main() { o = texture(uTex, v); }
 \`;
 
+// Resize remap — "expanding universe". Scatter-via-gather: each old cell is
+// placed at its proportionally-scaled position at native 1:1 resolution.
+// Growing opens real gaps between cells (fresh sim space the CA grows into);
+// shrinking contracts cells toward each other. No block-inflation, so the
+// resolution-dependent character of the simulation is preserved, not stretched.
+// NEAREST texelFetch keeps the quantized direction/species encoding intact.
+var REMAP_FRAG = \`#version 300 es
+precision highp float;
+uniform sampler2D uTex;
+uniform vec2 uOldRes, uNewRes;
+out vec4 o;
+void main() {
+  ivec2 dst = ivec2(gl_FragCoord.xy);
+  vec2 scale = uNewRes / uOldRes;
+  ivec2 src = ivec2(round(vec2(dst) / scale));
+  if (src.x < 0 || src.y < 0 || src.x >= int(uOldRes.x) || src.y >= int(uOldRes.y)) { o = vec4(0.0); return; }
+  // accept only the dest this source maps onto — leaves gaps (grow) / drops (shrink)
+  if (ivec2(round(vec2(src) * scale)) != dst) { o = vec4(0.0); return; }
+  o = texelFetch(uTex, src, 0);
+}
+\`;
+
 var COMP_FRAG = \`#version 300 es
 precision highp float;
 uniform sampler2D uRender, uBloom1, uBloom2;
@@ -716,7 +752,7 @@ function bindTex(unit, tex) {
 // ═══════════════════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════════════════
-var simProg, renderProg, blurProg, copyProg, compProg;
+var simProg, renderProg, blurProg, copyProg, compProg, remapProg;
 var simTex = [], simFBO = [], seedTex;
 var renderTex, renderFBO;
 var bloomA = [], bloomAFBO = [], bloomB = [], bloomBFBO = [];
@@ -761,6 +797,7 @@ function init() {
   blurProg   = makeProgram(VERT, BLUR_FRAG);
   copyProg   = makeProgram(VERT, COPY_FRAG);
   compProg   = makeProgram(VERT, COMP_FRAG);
+  remapProg  = makeProgram(VERT, REMAP_FRAG);
 
   // Quad
   quadVAO = gl.createVertexArray();
@@ -1310,6 +1347,9 @@ function scrollStep() {
 function snapTo(index) {
   index = ((index % N) + N) % N;
   current = index;
+  // Audio bed: cross-fade to this slide's loop if user has armed audio.
+  // Defined further down — guarded so boot ordering can't crash this.
+  if (typeof playSlideAudio === 'function' && audioArmed) playSlideAudio(current);
   pos = current * H; vel = 0; scrolling = false; locked = true;
 
   // Clear simulation state
@@ -1343,7 +1383,6 @@ function snapTo(index) {
 }
 
 function updateUI() {
-  document.getElementById('sourceLink').style.display = current === N - 1 ? 'block' : 'none';
 }
 
 // ═══════════════════════════════════════════════════════
@@ -1426,12 +1465,170 @@ document.addEventListener('mouseup', function(e) {
 });
 
 // ═══════════════════════════════════════════════════════
+// AUDIO BED
+// ═══════════════════════════════════════════════════════
+// One looping audio file per slide, served from /audio/slide-N.opus.
+// Muted by default. A floating toggle (or 'm' key) arms playback.
+// On slide change (snapTo), the current loop cross-fades to the next.
+//
+// Both old and new sources keep playing through the fade — only their
+// GainNodes ramp. After the fade completes, the old source is stopped
+// and freed. AudioBufferSourceNodes are single-shot; we make a fresh
+// one each time we (re-)start a slide.
+//
+// If a buffer fails to load (404 because the file isn't there yet, or
+// decode error), the slot stays null and that slide is silent. The
+// rest of the system keeps working.
+var AUDIO_FADE_MS = 600;
+var AUDIO_SLIDE_COUNT = 8;
+var audioCtx = null;
+var audioBuffers = new Array(AUDIO_SLIDE_COUNT).fill(null);
+var audioActive = new Array(AUDIO_SLIDE_COUNT).fill(null); // { src, gain } per slide currently fading/playing
+var audioArmed = false;
+var audioLoadStarted = false;
+
+function loadAudioBuffers() {
+  if (audioLoadStarted || !audioCtx) return;
+  audioLoadStarted = true;
+  for (var i = 0; i < AUDIO_SLIDE_COUNT; i++) {
+    (function(idx) {
+      fetch('/audio/slide-' + idx + '.opus')
+        .then(function(r) {
+          if (!r.ok) throw new Error('http ' + r.status);
+          return r.arrayBuffer();
+        })
+        .then(function(buf) {
+          return new Promise(function(resolve, reject) {
+            // Use callback form for Safari compatibility.
+            audioCtx.decodeAudioData(buf, resolve, reject);
+          });
+        })
+        .then(function(decoded) {
+          audioBuffers[idx] = decoded;
+          // If user is on this slide right now and armed, kick it off.
+          if (audioArmed && current === idx && !audioActive[idx]) {
+            playSlideAudio(idx);
+          }
+        })
+        .catch(function(err) {
+          console.log('[audio] slide-' + idx + ' unavailable:', err.message || err);
+        });
+    })(i);
+  }
+}
+
+function stopActiveSlide(idx, fadeMs) {
+  // Ramp this slide's gain to zero, then stop and free the source.
+  var entry = audioActive[idx];
+  if (!entry) return;
+  audioActive[idx] = null;
+  var now = audioCtx.currentTime;
+  var fade = (fadeMs || AUDIO_FADE_MS) / 1000;
+  try {
+    entry.gain.gain.cancelScheduledValues(now);
+    entry.gain.gain.setValueAtTime(entry.gain.gain.value, now);
+    entry.gain.gain.linearRampToValueAtTime(0.0001, now + fade);
+    entry.src.stop(now + fade + 0.05);
+  } catch (e) { /* already stopped */ }
+}
+
+function playSlideAudio(idx) {
+  if (!audioCtx) return;
+  // Cross-fade: stop everything else, start (or re-anchor) this slide's loop.
+  for (var j = 0; j < AUDIO_SLIDE_COUNT; j++) {
+    if (j !== idx && audioActive[j]) stopActiveSlide(j, AUDIO_FADE_MS);
+  }
+  // If this slide is already playing, just make sure it's at full gain.
+  var existing = audioActive[idx];
+  var now = audioCtx.currentTime;
+  var fade = AUDIO_FADE_MS / 1000;
+  if (existing) {
+    existing.gain.gain.cancelScheduledValues(now);
+    existing.gain.gain.setValueAtTime(existing.gain.gain.value, now);
+    existing.gain.gain.linearRampToValueAtTime(1.0, now + fade);
+    return;
+  }
+  var buf = audioBuffers[idx];
+  if (!buf) return; // not loaded (yet) — silent
+  var src = audioCtx.createBufferSource();
+  src.buffer = buf;
+  src.loop = true;
+  var gain = audioCtx.createGain();
+  gain.gain.setValueAtTime(0.0001, now);
+  gain.gain.linearRampToValueAtTime(1.0, now + fade);
+  src.connect(gain).connect(audioCtx.destination);
+  src.start(now);
+  audioActive[idx] = { src: src, gain: gain };
+}
+
+function muteAudio() {
+  audioArmed = false;
+  if (!audioCtx) return;
+  for (var j = 0; j < AUDIO_SLIDE_COUNT; j++) stopActiveSlide(j, AUDIO_FADE_MS);
+  var btn = document.getElementById('audioToggle');
+  if (btn) { btn.classList.remove('armed'); btn.textContent = '\u266a'; }
+}
+
+function armAudio() {
+  // Lazy AudioContext creation — must happen inside a user gesture.
+  if (!audioCtx) {
+    var Ctx = window.AudioContext || window.webkitAudioContext;
+    if (!Ctx) { console.log('[audio] Web Audio API unavailable'); return; }
+    audioCtx = new Ctx();
+  }
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  loadAudioBuffers();
+  audioArmed = true;
+  playSlideAudio(current);
+  var btn = document.getElementById('audioToggle');
+  if (btn) { btn.classList.add('armed'); btn.textContent = '\u266b'; }
+}
+
+(function wireAudioToggle() {
+  var btn = document.getElementById('audioToggle');
+  if (!btn) return;
+  btn.addEventListener('click', function(e) {
+    e.preventDefault(); e.stopPropagation();
+    if (audioArmed) muteAudio(); else armAudio();
+  });
+  // 'm' key — but only when not modified (don't steal Cmd-M minimize, etc.)
+  document.addEventListener('keydown', function(e) {
+    if (e.key !== 'm' && e.key !== 'M') return;
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    e.preventDefault();
+    if (audioArmed) muteAudio(); else armAudio();
+  });
+})();
+
+// ═══════════════════════════════════════════════════════
+// AUTO-CYCLE (projector mode)
+// ═══════════════════════════════════════════════════════
+// Enable with ?auto or ?auto=<seconds>. Pages advance on their own;
+// any interaction resets the idle timer so the presenter can still
+// tap to stamp a rune without fighting the cycle.
+var AUTO_PARAM = new URLSearchParams(location.search).get('auto');
+var AUTO = AUTO_PARAM !== null;
+var AUTO_PERIOD_MS = (parseFloat(AUTO_PARAM) || 20) * 1000;
+var lastInteraction = Date.now();
+function bumpInteraction() { lastInteraction = Date.now(); }
+if (AUTO) {
+  document.addEventListener('wheel', bumpInteraction, { passive: true });
+  document.addEventListener('touchstart', bumpInteraction, { passive: true });
+  document.addEventListener('keydown', bumpInteraction);
+  document.addEventListener('mousedown', bumpInteraction);
+}
+
+// ═══════════════════════════════════════════════════════
 // MAIN LOOP
 // ═══════════════════════════════════════════════════════
 
 function frame() {
   tick++;
   if (scrolling) scrollStep();
+  if (AUTO && !locked && current < N - 1 && Date.now() - lastInteraction > AUTO_PERIOD_MS) {
+    lastInteraction = Date.now();
+    snapTo(current + 1);
+  }
 
   // Tide — slow oscillation of species dominance
   var tCfg = PAGE_CONFIGS[current];
@@ -1481,29 +1678,67 @@ if (init()) {
 }
 
 window.addEventListener('resize', function() {
-  // Full reinit on resize
+  var oldW = W, oldH = H;
+  if (oldW === window.innerWidth && oldH === window.innerHeight) return;
+  var oldSimTex = simTex[ping];
+
   W = window.innerWidth; H = window.innerHeight;
   canvas.width = W; canvas.height = H;
 
-  // Recreate textures at new size
-  simTex[0] = makeTex(W, H, gl.RGBA16F, gl.HALF_FLOAT, gl.NEAREST);
-  simTex[1] = makeTex(W, H, gl.RGBA16F, gl.HALF_FLOAT, gl.NEAREST);
-  simFBO[0] = makeFBO(simTex[0]); simFBO[1] = makeFBO(simTex[1]);
+  // --- Preserve live simulation state: resample old cells into new-sized
+  //     sim textures so existing pixels drift apart (grow) / contract (shrink)
+  //     instead of resetting to zero. ---
+  var newSim0 = makeTex(W, H, gl.RGBA16F, gl.HALF_FLOAT, gl.NEAREST);
+  var newSim1 = makeTex(W, H, gl.RGBA16F, gl.HALF_FLOAT, gl.NEAREST);
+  var newSimFBO0 = makeFBO(newSim0), newSimFBO1 = makeFBO(newSim1);
+
+  gl.useProgram(remapProg);
+  gl.uniform1i(gl.getUniformLocation(remapProg, 'uTex'), 0);
+  gl.uniform2f(gl.getUniformLocation(remapProg, 'uOldRes'), oldW, oldH);
+  gl.uniform2f(gl.getUniformLocation(remapProg, 'uNewRes'), W, H);
+  bindTex(0, oldSimTex);
+  gl.bindFramebuffer(gl.FRAMEBUFFER, newSimFBO0);
+  gl.viewport(0, 0, W, H);
+  drawQuad();
+  // scratch ping buffer starts empty
+  gl.bindFramebuffer(gl.FRAMEBUFFER, newSimFBO1);
+  gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT);
+
+  // Swap in resampled sim textures; free the old ones
+  gl.deleteFramebuffer(simFBO[0]); gl.deleteFramebuffer(simFBO[1]);
+  gl.deleteTexture(simTex[0]); gl.deleteTexture(simTex[1]);
+  simTex[0] = newSim0; simTex[1] = newSim1;
+  simFBO[0] = newSimFBO0; simFBO[1] = newSimFBO1;
+  ping = 0;
+
+  // Recreate the per-frame render/bloom targets and the seed layer at new size
+  gl.deleteTexture(seedTex);
   seedTex = makeTex(W, H, gl.RGBA16F, gl.HALF_FLOAT, gl.NEAREST);
+  gl.deleteFramebuffer(renderFBO); gl.deleteTexture(renderTex);
   renderTex = makeTex(W, H, gl.RGBA16F, gl.HALF_FLOAT, gl.LINEAR);
   renderFBO = makeFBO(renderTex);
   halfW = Math.ceil(W/2); halfH = Math.ceil(H/2);
   quarterW = Math.ceil(W/4); quarterH = Math.ceil(H/4);
+  gl.deleteFramebuffer(bloomAFBO[0]); gl.deleteFramebuffer(bloomAFBO[1]);
+  gl.deleteTexture(bloomA[0]); gl.deleteTexture(bloomA[1]);
   bloomA[0] = makeTex(halfW, halfH, gl.RGBA16F, gl.HALF_FLOAT, gl.LINEAR);
   bloomA[1] = makeTex(halfW, halfH, gl.RGBA16F, gl.HALF_FLOAT, gl.LINEAR);
   bloomAFBO[0] = makeFBO(bloomA[0]); bloomAFBO[1] = makeFBO(bloomA[1]);
+  gl.deleteFramebuffer(bloomBFBO[0]); gl.deleteFramebuffer(bloomBFBO[1]);
+  gl.deleteTexture(bloomB[0]); gl.deleteTexture(bloomB[1]);
   bloomB[0] = makeTex(quarterW, quarterH, gl.RGBA16F, gl.HALF_FLOAT, gl.LINEAR);
   bloomB[1] = makeTex(quarterW, quarterH, gl.RGBA16F, gl.HALF_FLOAT, gl.LINEAR);
   bloomBFBO[0] = makeFBO(bloomB[0]); bloomBFBO[1] = makeFBO(bloomB[1]);
   seedData = new Float32Array(W * H * 4);
   initTrail();
 
-  snapTo(current);
+  // Re-rasterize the current page's text crisply at the new resolution.
+  // NOTE: unlike snapTo(), this does NOT clear sim state or reset reveal
+  // progress — the bloom keeps evolving from where it was.
+  generateSeed(current);
+
+  // Keep the scroll/page position aligned to the new viewport height.
+  pos = current * H; vel = 0;
 });
 </script>
 </body>
@@ -1560,12 +1795,94 @@ function isAgent(req) {
 
 const INSTALL_URL = "https://raw.githubusercontent.com/lrhodin/snorrio/main/install.sh";
 
+import { POST_HTML } from './post-content.js';
+import { GEMINI_IMG, COLTER_IMG } from './post-images.js';
+import { KAT_WISDOM_HTML } from './kat-wisdom.js';
+
+function decodeBase64(b64) {
+  const binary = atob(b64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  return bytes;
+}
+
+// ════════════════════════════════════════════════════════════════════
+// AUDIO BLOBS
+// ════════════════════════════════════════════════════════════════════
+// One looping audio bed per slide (8 slides total, indices 0–7).
+// Values are base64-encoded Opus-in-OGG bytes. Empty string = not yet
+// populated; the route returns 404 and the client silently skips that
+// slide. Drop a real base64 string in here when the file arrives:
+//   AUDIO_BLOBS["/audio/slide-0.opus"] = "...base64...";
+// or just edit this object directly.
+const AUDIO_BLOBS = {
+  "/audio/slide-0.opus": "",
+  "/audio/slide-1.opus": "",
+  "/audio/slide-2.opus": "",
+  "/audio/slide-3.opus": "",
+  "/audio/slide-4.opus": "",
+  "/audio/slide-5.opus": "",
+  "/audio/slide-6.opus": "",
+  "/audio/slide-7.opus": "",
+};
+
 export default {
   async fetch(req) {
     const url = new URL(req.url);
     if (url.pathname === "/install" || url.pathname === "/install.sh") {
       return Response.redirect(INSTALL_URL, 302);
     }
+
+    // Audio bed: /audio/slide-N.opus (N = 0..7). Empty slot → 404.
+    if (url.pathname.startsWith("/audio/slide-") && url.pathname.endsWith(".opus")) {
+      const blob = AUDIO_BLOBS[url.pathname];
+      if (!blob) {
+        return new Response("audio not yet available", { status: 404 });
+      }
+      return new Response(decodeBase64(blob), {
+        headers: {
+          "content-type": "audio/ogg",
+          "cache-control": "public, max-age=86400",
+        },
+      });
+    }
+
+    // Kat's Wisdom Summit speech slides
+    if (url.pathname === "/kat/wisdom" || url.pathname === "/kat/wisdom/") {
+      return new Response(KAT_WISDOM_HTML, {
+        headers: {
+          "content-type": "text/html;charset=UTF-8",
+          "cache-control": "public, max-age=300",
+        },
+      });
+    }
+
+    // Post: Your AI Assistant
+    if (url.pathname === "/post/your-ai-assistant" || url.pathname === "/post/your-ai-assistant/") {
+      return new Response(POST_HTML, {
+        headers: {
+          "content-type": "text/html;charset=UTF-8",
+          "cache-control": "public, max-age=3600",
+        },
+      });
+    }
+    if (url.pathname === "/post/your-ai-assistant/img/gemini.jpg") {
+      return new Response(decodeBase64(GEMINI_IMG), {
+        headers: {
+          "content-type": "image/jpeg",
+          "cache-control": "public, max-age=86400",
+        },
+      });
+    }
+    if (url.pathname === "/post/your-ai-assistant/img/colter.jpg") {
+      return new Response(decodeBase64(COLTER_IMG), {
+        headers: {
+          "content-type": "image/jpeg",
+          "cache-control": "public, max-age=86400",
+        },
+      });
+    }
+
     if (url.pathname === "/" || url.pathname === "") {
       if (isAgent(req)) {
         return new Response(AGENT_TEXT, { headers: { "content-type": "text/markdown; charset=utf-8" } });
